@@ -1,16 +1,35 @@
 @import "tailwindcss";
 
 :root {
-  --color-bg: #0B1F3A;
-  --color-surface: #07172B;
+  --color-bg: #FFFFFF;
+  --color-surface: #F1F5F9;
   --color-primary: #2563EB;
-  --color-text: #FFFFFF;
-  --color-muted: #94A3B8;
-  --color-border: rgba(255,255,255,0.10);
+  --color-primary-dark: #1D4ED8;
+  --color-text: #0F172A;
+  --color-muted: #64748B;
+  --color-border: rgba(0,0,0,0.08);
+  --color-card: #FFFFFF;
+  --color-nav: rgba(255,255,255,0.95);
 
   --radius-sm: 6px;
   --radius-md: 12px;
   --radius-lg: 20px;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+}
+
+[data-theme="dark"] {
+  --color-bg: #0B1F3A;
+  --color-surface: #07172B;
+  --color-primary: #2563EB;
+  --color-primary-dark: #1D4ED8;
+  --color-text: #FFFFFF;
+  --color-muted: #94A3B8;
+  --color-border: rgba(255,255,255,0.10);
+  --color-card: #07172B;
+  --color-nav: rgba(7,23,43,0.95);
 
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
   --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
@@ -28,6 +47,7 @@ body {
   color: var(--color-text);
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 html {

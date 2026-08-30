@@ -3,10 +3,12 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTheme } from '@/context/ThemeContext';
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const { theme, toggleTheme } = useTheme();
 
   const menus = {
     Products: [
@@ -27,24 +29,26 @@ export default function Navbar() {
     Resources: [
       { label: 'Blog', href: '/blog' },
       { label: 'Documentation', href: '/docs' },
-      { label: 'Guides', href: '/docs/guides' },
       { label: 'Support', href: '/support' },
       { label: 'Community', href: '/community' },
     ],
     Marketplace: [
       { label: 'Templates', href: '/marketplace/templates' },
-      { label: 'AI Tools', href: '/marketplace/ai' },
-      { label: 'Digital Products', href: '/marketplace/products' },
+      { label: 'Digital Products', href: '/marketplace' },
       { label: 'Services', href: '/services' },
       { label: 'Courses', href: '/academy' },
     ],
   };
 
+  const isDark = theme === 'dark';
+
   return (
     <nav style={{
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-      background: 'rgba(7,23,43,0.95)', backdropFilter: 'blur(12px)',
+      background: 'var(--color-nav)',
+      backdropFilter: 'blur(12px)',
       borderBottom: '1px solid var(--color-border)',
+      boxShadow: 'var(--shadow-sm)',
     }}>
       <div style={{
         maxWidth: '1280px', margin: '0 auto', padding: '0 24px',
@@ -70,7 +74,7 @@ export default function Navbar() {
               onMouseLeave={() => setActiveMenu(null)}>
               <button style={{
                 background: 'none', border: 'none',
-                color: activeMenu === name ? '#fff' : 'var(--color-muted)',
+                color: activeMenu === name ? 'var(--color-primary)' : 'var(--color-muted)',
                 fontSize: '14px', fontWeight: 500, padding: '8px 12px',
                 cursor: 'pointer', borderRadius: 'var(--radius-sm)', transition: 'color 0.2s',
               }}>
@@ -79,7 +83,8 @@ export default function Navbar() {
               {activeMenu === name && (
                 <div style={{
                   position: 'absolute', top: '100%', left: 0,
-                  background: 'var(--color-surface)', border: '1px solid var(--color-border)',
+                  background: 'var(--color-card)',
+                  border: '1px solid var(--color-border)',
                   borderRadius: 'var(--radius-md)', padding: '8px',
                   minWidth: '200px', boxShadow: 'var(--shadow-lg)',
                 }}>
@@ -90,8 +95,8 @@ export default function Navbar() {
                       fontSize: '14px', borderRadius: 'var(--radius-sm)', transition: 'all 0.2s',
                     }}
                     onMouseEnter={e => {
-                      (e.target as HTMLElement).style.color = '#fff';
-                      (e.target as HTMLElement).style.background = 'rgba(255,255,255,0.05)';
+                      (e.target as HTMLElement).style.color = 'var(--color-primary)';
+                      (e.target as HTMLElement).style.background = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(37,99,235,0.05)';
                     }}
                     onMouseLeave={e => {
                       (e.target as HTMLElement).style.color = 'var(--color-muted)';
@@ -112,18 +117,33 @@ export default function Navbar() {
 
         {/* Right */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {/* Theme Toggle */}
+          <button onClick={toggleTheme} style={{
+            background: 'var(--color-surface)',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius-sm)',
+            padding: '8px 10px',
+            cursor: 'pointer',
+            fontSize: '16px',
+            transition: 'all 0.2s',
+          }}>
+            {isDark ? '☀️' : '🌙'}
+          </button>
+
           <Link href="/login" style={{
             color: 'var(--color-muted)', textDecoration: 'none',
             fontSize: '14px', fontWeight: 500,
           }}>Log in</Link>
+
           <Link href="/signup" style={{
             background: 'var(--color-primary)', color: '#fff',
             textDecoration: 'none', fontSize: '14px', fontWeight: 600,
             padding: '8px 18px', borderRadius: 'var(--radius-sm)',
           }}>Get Started</Link>
+
           <button onClick={() => setMobileOpen(!mobileOpen)} style={{
             display: 'none', background: 'none', border: 'none',
-            color: '#fff', fontSize: '24px', cursor: 'pointer',
+            color: 'var(--color-text)', fontSize: '24px', cursor: 'pointer',
           }} className="mobile-menu-btn">
             {mobileOpen ? '✕' : '☰'}
           </button>
@@ -133,7 +153,8 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {mobileOpen && (
         <div style={{
-          background: 'var(--color-surface)', borderTop: '1px solid var(--color-border)',
+          background: 'var(--color-card)',
+          borderTop: '1px solid var(--color-border)',
           padding: '16px 24px', maxHeight: '80vh', overflowY: 'auto',
         }}>
           {Object.entries(menus).map(([name, items]) => (
@@ -145,8 +166,8 @@ export default function Navbar() {
               {items.map((item) => (
                 <Link key={item.href} href={item.href}
                   onClick={() => setMobileOpen(false)} style={{
-                    display: 'block', color: '#fff', textDecoration: 'none',
-                    fontSize: '15px', padding: '8px 0',
+                    display: 'block', color: 'var(--color-text)',
+                    textDecoration: 'none', fontSize: '15px', padding: '8px 0',
                     borderBottom: '1px solid var(--color-border)',
                   }}>{item.label}</Link>
               ))}
@@ -154,7 +175,7 @@ export default function Navbar() {
           ))}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '16px' }}>
             <Link href="/login" style={{
-              color: '#fff', textDecoration: 'none', fontSize: '15px',
+              color: 'var(--color-text)', textDecoration: 'none', fontSize: '15px',
               textAlign: 'center', padding: '12px',
               border: '1px solid var(--color-border)', borderRadius: 'var(--radius-sm)',
             }}>Log in</Link>
